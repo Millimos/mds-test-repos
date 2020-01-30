@@ -1,0 +1,339 @@
+openapi: 3.0.0
+info:
+  description: "Eval"
+  title: 'Eval'
+  version: "0.1.0"
+servers: 
+- url: https://api.example.com
+paths:
+  /movies:
+    post:
+      operationId: "addMovie"
+      requestBody:
+        description: "Movie to be added" 
+        required: true
+        content: 
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Movie'
+      responses:
+        201:
+          description: "movie created"
+        422:
+          description: "Problems with your request"
+    get:
+      operationId: "listMovies"
+      responses:
+        200:
+          description: ""
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Movies'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movies'
+  /actors:
+    post:
+      operationId: "addActor"
+      requestBody:
+        description: "Actor to be added" 
+        required: true
+        content: 
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Actor'
+      responses:
+        201:
+          description: "Actor created"
+        422:
+          description: "Problems with your request"
+    get:
+      operationId: "listActors"
+      responses:
+        200:
+          description: ""
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Actors'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Actors'
+  /directors:
+    post:
+      operationId: "addDirector"
+      requestBody:
+        description: "Director to be added" 
+        required: true
+        content: 
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Director'
+      responses:
+        201:
+          description: "Director created"
+        422:
+          description: "Problems with your request"
+    get:
+      operationId: "listDirector"
+      responses:
+        200:
+          description: ""
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Director'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Director'
+  /movies/{id}:
+    get:
+      operationId: "getMovie"
+      parameters: 
+      - name: "id"
+        in: path
+        required: true
+        description: "id of the movie"
+        schema:
+          type: string
+      responses:
+        200:
+          description: "the movie"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movie'
+  /movies/{movieId}/Actors/:
+    get:
+      operationId: "listActorsFromMovie"
+      parameters: 
+      - name: "movieId"
+        in: path
+        required: true
+        description: "id of the movie"
+        schema:
+          type: string
+      responses:
+        200:
+          description: "the movie actors"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Actors'
+  /movies/{movieId}/critics/:
+    get:
+      operationId: "listCriticsFromMovie"
+      parameters: 
+      - name: "movieId"
+        in: path
+        required: true
+        description: "id of the movie"
+        schema:
+          type: string
+      responses:
+        200:
+          description: "the movie critics"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Critics'
+  /movies/{movieId}/critics/{criticId}:
+    get:
+      operationId: "getCriticFromMovie"
+      parameters: 
+      - name: "movieId"
+        in: path
+        required: true
+        description: "id of the movie"
+        schema:
+          type: string
+      
+      - name: "criticId"
+        in: path
+        required: true
+        description: "id of the movie"
+        schema:
+          type: string
+      responses:
+        200:
+          description: "the movie critic"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Critic'
+  /movies/{movieId}/notes/:
+    get:
+      operationId: "listNoteFromMovie"
+      parameters: 
+      - name: "movieId"
+        in: path
+        required: true
+        description: "id of the movie"
+        schema:
+          type: string
+      responses:
+        200:
+          description: "the movie note"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notes'
+  /actors/{id}:
+    get:
+      operationId: "getActors"
+      parameters: 
+      - name: "id"
+        in: path
+        required: true
+        description: "id of the actor"
+        schema:
+          type: string
+      responses:
+        200:
+          description: "the actor"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Actor'
+  /actors/{actorId}/movies/:
+    get:
+      operationId: "listMoviesFromActor"
+      parameters: 
+      - name: "actorId"
+        in: path
+        required: true
+        description: "id of the actor"
+        schema:
+          type: string
+      responses:
+        200:
+          description: "the actor movies"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movies'
+components:
+  schemas:
+    Movie:
+      type: "object"
+      required: 
+        - title
+        - pitch
+        - affiche
+        - trailer
+        - directors
+        - actors
+        - critics
+        - note
+      properties:
+        title:
+          type: "string"
+        pitch:
+          type: "string"
+        affiche:
+          type: "object"
+        trailer:
+          type: "object"
+        Director:
+          type: "array"
+          items:
+            $ref: '#/components/schemas/Directors'
+        Actors:
+          type: "array"
+          items:
+            $ref: '#/components/schemas/Actors'
+        Critics:
+          type: "array"
+          items:
+            $ref: '#/components/schemas/Critic'
+        note:
+          type: "number"
+    Movies:
+      type: "array"
+      items:
+        $ref: '#/components/schemas/Movie'
+    Critic:
+      type: "object"
+      required: 
+        - name
+        - description
+      properties:
+        name:
+          type: "string"
+        description:
+          type: "string"
+    Critics:
+      type: "array"
+      items:
+        $ref: '#/components/schemas/Critic'
+    Actor:
+      type: "object"
+      required: 
+        - name
+        - nationality
+        - photo
+        - born
+        - biography
+        - movies
+      properties:
+        name:
+          type: "string"
+        nationality:
+          type: "string"
+        photo:
+          type: "object"
+        born:
+          type: "string"
+        biography:
+          type: "string"
+        movies:
+          type: "array"
+          items:
+            $ref: '#/components/schemas/Movies'
+    Actors:
+      type: "array"
+      items:
+        $ref: '#/components/schemas/Actors'
+    Director:
+      type: "object"
+      required: 
+        - name
+        - nationality
+        - photo
+        - born
+        - biography
+        - movies
+      properties:
+        name:
+          type: "string"
+        nationality:
+          type: "string"
+        photo:
+          type: "object"
+        born:
+          type: "string"
+        biography:
+          type: "string"
+        movies:
+          type: "array"
+          items:
+            $ref: '#/components/schemas/Movies'
+    Directors:
+      type: "array"
+      items:
+        $ref: '#/components/schemas/Directors'
+    Note:
+      type: "object"
+      required: 
+        - value
+        - movie
+      properties:
+        name:
+          type: "number"
+        movie:
+          type: "string"
+    Notes:
+      type: "array"
+      items:
+        $ref: '#/components/schemas/Note'
